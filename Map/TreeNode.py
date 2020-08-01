@@ -7,8 +7,8 @@ class TreeNode(object):
         self.super_list = []
         self.iter_index = 0
 
-    def get_trees(self):
-        pass
+    def add_tree(self, tree):
+        self.forest.add(tree)
 
     def init_iterator(self):
         for node in self.node_forest:
