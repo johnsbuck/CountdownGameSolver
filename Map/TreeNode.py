@@ -20,7 +20,7 @@ class TreeNode(object):
         if self.iter_index < len(self.super_list):
             if isinstance(self.super_list[self.iter_index], TreeNode):
                 tree = self.super_list[self.iter_index].next_tree()
-                if tree == None:
+                if tree is None:
                     self.iter_index += 1
                     return self.next_tree()
                 else:
