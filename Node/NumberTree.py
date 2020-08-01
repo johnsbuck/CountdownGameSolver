@@ -86,7 +86,7 @@ class NumberTree(object):
         return False
 
     def __str__(self):
-        return "(" + str(self.value) + ", " + str(self.value) + ")"
+        return "(" + str(self.value) + ")"
 
     def __repr__(self):
         return self.__str__()
