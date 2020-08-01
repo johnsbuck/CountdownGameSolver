@@ -11,14 +11,21 @@ class TreeNode(object):
         pass
 
     def init_iterator(self):
+        for node in self.node_forest:
+            node.init_iterator()
         self.super_list = self.forest + self.node_forest
 
     def next_tree(self):
         if self.iter_index < len(self.super_list):
-            self.iter_index += 1
-            if isinstance(self.super_list[self.iter_index - 1], TreeNode):
-                return self.super_list[self.iter_index - 1].next_tree()
+            if isinstance(self.super_list[self.iter_index], TreeNode):
+                tree = self.super_list[self.iter_index].next_tree()
+                if tree == None:
+                    self.iter_index += 1
+                    return self.next_tree()
+                else:
+                    return tree
             else:
+                self.iter_index += 1
                 return self.super_list[self.iter_index - 1]
         else:
             return None
