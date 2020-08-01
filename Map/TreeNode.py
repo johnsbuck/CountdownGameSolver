@@ -25,3 +25,9 @@ class TreeNode(object):
 
     def reset_iterator(self):
         self.iter_index = 0
+
+    def __str__(self):
+        return str(self.key)
+
+    def __repr__(self):
+        return self.__str__()
