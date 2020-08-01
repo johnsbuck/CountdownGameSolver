@@ -5,7 +5,7 @@ class InclusionMap(object):
 
     def __init__(self, numbers):
         self.map = {}
-        self._generate_map(numbers[:])
+        self._generate_map([i for i in range(len(numbers))])
         self._generate_refs()
 
     def _generate_map(self, numbers, s=(), idx=0):
