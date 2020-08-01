@@ -11,6 +11,7 @@ class TreeNode(object):
         self.forest.add(tree)
 
     def init_iterator(self):
+        self.reset_iterator()
         for node in self.node_forest:
             node.init_iterator()
         self.super_list = self.forest + self.node_forest
