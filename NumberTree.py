@@ -1,6 +1,32 @@
 class NumberTree(object):
 
     def __init__(self, *args):
+        """
+            Creates a NumberTree.
+
+            Constructor for Leaves
+            -------------------
+            :param args[0]: The value of the tree
+            :type args[0]: int
+
+            Constructor for Operation Trees
+            -------------------
+            :param args[0]: The left side sub-tree
+            :param args[1]: The right side sub-tree
+            :param args[2]: The function to apply to the values of the two sub-trees
+            :type args[0]: NumberTree
+            :type args[1]: NumberTree
+            :type args[2]: lambda
+
+            :return: A NumberTree
+            :rtype: NumberTree
+
+            :Example:
+
+            >>> left_leaf = new NumberTree(7)
+            >>> right_leaf = new NumberTree(4)
+            >>> tree = new NumberTree(left_leaf, right_leaf, lambda x,y: x+y)
+            """
         if len(args) == 1:
             self.left_tree = None
             self.right_tree = None
