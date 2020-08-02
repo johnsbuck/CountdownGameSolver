@@ -32,15 +32,22 @@ class NumberTree(object):
             self.right_tree = None
             self.operator = None
             self._val = args[0]
+            self._num = [args[0],]
         else:
             self.left_tree = args[0]
             self.right_tree = args[1]
             self.operator = args[2]
             self._val = self.operator(self.left_tree.value, self.right_tree.value)
+            self._num = args[0].numbers + args[1].numbers
+            self._num.sort()
 
     @property
     def value(self):
         return self._val
+
+    @property
+    def numbers(self):
+        return self._num
 
     # Needs work
     # def print_tree(self, prefix=None, suffix=None):
