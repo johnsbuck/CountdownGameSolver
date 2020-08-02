@@ -10,13 +10,17 @@ class InclusionMap(object):
 
     """
 
-    def __init__(self, numbers):
+    def __init__(self, numbers=[i for i in range(6)]):
         # The main dict map used to store each TreeNode
         self.map = {}
 
         # Initializing the map values and TreeNodes
-        self._generate_map([i for i in range(len(numbers))])
+        self._generate_map(numbers)
         self._generate_refs()
+
+    def add(self, new_tree):
+        key = tuple(new_tree.numbers)
+        self.map[key].add_tree(new_tree)
 
     def _generate_map(self, numbers, s=(), idx=0):
         """Generates the main map used to explore the set of NumberTrees.
