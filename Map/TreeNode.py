@@ -4,35 +4,34 @@ class TreeNode(object):
         self.key = key
         self.forest = []
         self.node_forest = []
-        self.super_list = []
-        self.iter_index = 0
+        self.forest_iter_index = 0
+        self.node_iter_index = 0
 
     def add_tree(self, tree):
         self.forest.add(tree)
 
-    def init_iterator(self):
-        self.reset_iterator()
-        for node in self.node_forest:
-            node.init_iterator()
-        self.super_list = self.forest + self.node_forest
+    def init_iterator(self, start_index=0):
+        self.node_iter_index = start_index
 
     def next_tree(self):
-        if self.iter_index < len(self.super_list):
-            if isinstance(self.super_list[self.iter_index], TreeNode):
-                tree = self.super_list[self.iter_index].next_tree()
-                if tree is None:
-                    self.iter_index += 1
-                    return self.next_tree()
-                else:
-                    return tree
+        if self.forest_iter_index < len(self.forest):
+            self.forest_iter_index += 1
+            return self.forest[self.forest_iter_index - 1]
+        elif self.node_iter_index < len(self.node_forest):
+            next_node = self.node_forest[self.node_iter_index]
+            next_node.init_iterator(self.node_iter_index)
+            tree = next_node.next_tree()
+            if tree is None:
+                self.node_iter_index += 1
+                return self.next_tree()
             else:
-                self.iter_index += 1
-                return self.super_list[self.iter_index - 1]
+                return tree
         else:
             return None
 
     def reset_iterator(self):
-        self.iter_index = 0
+        self.forest_iter_index = 0
+        self.node_iter_index = 0
 
     def __str__(self):
         return str(self.key)
