@@ -1,2 +1,4 @@
-from .InclusionMap import InclusionMap
-from .TreeNode import TreeNode
+from .InclusionMap import InclusionMap, TreeNode
+
+
+__all__ = ["InclusionMap", "TreeNode"]

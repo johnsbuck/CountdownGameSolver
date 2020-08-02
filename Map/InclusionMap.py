@@ -1,4 +1,44 @@
-from Map import TreeNode
+
+class TreeNode(object):
+
+    def __init__(self, key):
+        self.key = key
+        self.forest = []
+        self.node_forest = []
+        self.forest_iter_index = 0
+        self.node_iter_index = 0
+
+    def add_tree(self, tree):
+        self.forest.append(tree)
+
+    def init_iterator(self, start_index=0):
+        self.node_iter_index = start_index
+
+    def next_tree(self):
+        if self.forest_iter_index < len(self.forest):
+            self.forest_iter_index += 1
+            return self.forest[self.forest_iter_index - 1]
+        elif self.node_iter_index < len(self.node_forest):
+            next_node = self.node_forest[self.node_iter_index]
+            next_node.init_iterator(self.node_iter_index)
+            tree = next_node.next_tree()
+            if tree is None:
+                self.node_iter_index += 1
+                return self.next_tree()
+            else:
+                return tree
+        else:
+            return None
+
+    def reset_iterator(self):
+        self.forest_iter_index = 0
+        self.node_iter_index = 0
+
+    def __str__(self):
+        return str(self.key)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class InclusionMap(object):
@@ -6,16 +46,16 @@ class InclusionMap(object):
     to each other.
 
     Args:
-        numbers (list[int]): The numbers used in the Numbers Round.
+        size (int): The size of the number list used in the Numbers Round.
 
     """
 
-    def __init__(self, numbers=[i for i in range(6)]):
+    def __init__(self, size=6):
         # The main dict map used to store each TreeNode
         self.map = {}
 
         # Initializing the map values and TreeNodes
-        self._generate_map(numbers)
+        self._generate_map(list(range(size)))
         self._generate_refs()
 
     def add(self, new_tree):

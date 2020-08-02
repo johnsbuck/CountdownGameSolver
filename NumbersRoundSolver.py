@@ -7,7 +7,7 @@ class NumbersRoundSolver(object):
 
     def __init__(self, numbers=None, solve_num=None):
         self.numbers = self.generate_numbers() if numbers is None else numbers
-        numbers.sort()
+        self.numbers.sort()
         self.goal = random.randint(100, 999) if solve_num is None else solve_num
 
     @staticmethod
@@ -25,8 +25,7 @@ class NumbersRoundSolver(object):
     #     print(formula)
 
     def solve(self):
-        print(self.numbers)
-        tree_map = InclusionMap(self.numbers)
+        tree_map = InclusionMap(len(self.numbers))
 
         for i in self.numbers:
             tree_map.add(NumberTree(i))
