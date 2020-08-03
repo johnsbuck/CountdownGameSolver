@@ -7,6 +7,7 @@ class NumberTree(object):
             Constructor for Leaves
             -------------------
             :param args[0]: The value of the tree
+            :param args[1]: The key tuple for this tree
             :type args[0]: int
 
             Constructor for Operation Trees
@@ -27,27 +28,28 @@ class NumberTree(object):
             >>> right_leaf = new NumberTree(4)
             >>> tree = new NumberTree(left_leaf, right_leaf, lambda x,y: x+y)
             """
-        if len(args) == 1:
+        if len(args) == 2:
             self.left_tree = None
             self.right_tree = None
             self.operator = None
             self._val = args[0]
-            self._num = [args[0],]
-        else:
+            self._key = args[1]
+        elif len(args) == 3:
             self.left_tree = args[0]
             self.right_tree = args[1]
             self.operator = args[2]
             self._val = self.operator(self.left_tree.value, self.right_tree.value)
-            self._num = args[0].numbers + args[1].numbers
-            self._num.sort()
+            key_list = list(args[0].key) + list(args[1].key)
+            key_list.sort()
+            self._key = tuple(key_list)
 
     @property
     def value(self):
         return self._val
 
     @property
-    def numbers(self):
-        return self._num
+    def key(self):
+        return self._key
 
     # Needs work
     # def print_tree(self, prefix=None, suffix=None):
@@ -93,7 +95,14 @@ class NumberTree(object):
         return False
 
     def __str__(self):
-        return "(" + str(self.value) + ")"
+        if self.left_tree is None:
+            if self.right_tree is None:
+                return str(self.value)
+            return str(self.value) + " + " + str(self.right_tree)
+        if self.right_tree is None:
+            return str(self.left_tree) + " + " + str(self.value)
+
+        return str(self.left_tree) + " + " + str(self.right_tree)
 
     def __repr__(self):
         return self.__str__()

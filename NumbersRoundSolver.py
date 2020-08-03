@@ -27,18 +27,18 @@ class NumbersRoundSolver(object):
     def solve(self):
         tree_map = InclusionMap(len(self.numbers))
 
-        for i in self.numbers:
-            tree_map.add(NumberTree(i))
+        for index, i in enumerate(self.numbers):
+            tree_map.add(NumberTree(i, (index,)))
         all_trees = tree_map.all_trees()
         for left_subtree in all_trees:
-            key = tuple(left_subtree.numbers)
-            print(tree_map.map[key])
+            key = left_subtree.key
+            right_selection = tree_map.get_trees(key)
+            for right_subtree in right_selection:
+                tree_map.add(NumberTree(left_subtree, right_subtree, (lambda x,y: x + y)))
 
-
-
-
-        #tree_map.add(new_tree)
-
+        print(self.numbers)
+        for tree in tree_map.all_trees():
+            print(tree)
 
 if __name__ == "__main__":
     solver = NumbersRoundSolver()
