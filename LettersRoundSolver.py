@@ -25,7 +25,7 @@ class LettersRoundSolver(object):
                 for char in line:
                     node.add_child(char)
                     node = node.children[char]
-                node.value.append(word)
+                node.value = word
         print(i)
 
     @staticmethod
@@ -54,7 +54,7 @@ class LettersRoundSolver(object):
         return output
 
     def _solve_all(self, node, letters):
-        output = node.value[:]
+        output = [] if node.value is None else [node.value]
         for i in range(len(letters)):
             if i > 0 and letters[i] == letters[i - 1]:
                 continue

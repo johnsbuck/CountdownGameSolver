@@ -3,7 +3,7 @@ class KNode(object):
 
     def __init__(self, key):
         self.key = key
-        self.value = []
+        self.value = None
         self.children = {}
 
     def add_child(self, key):
