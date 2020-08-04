@@ -1,5 +1,6 @@
 from Node import NumberTree
 from Map import InclusionMap
+import sys
 import random
 
 
@@ -25,6 +26,8 @@ class NumbersRoundSolver(object):
     #     print(formula)
 
     def solve(self):
+        print(self.numbers, self.goal)
+
         tree_map = InclusionMap(len(self.numbers))
 
         for index, i in enumerate(self.numbers):
@@ -34,11 +37,20 @@ class NumbersRoundSolver(object):
             key = left_subtree.key
             right_selection = tree_map.get_trees(key)
             for right_subtree in right_selection:
-                tree_map.add(NumberTree(left_subtree, right_subtree, (lambda x,y: x + y)))
+                if left_subtree.value >= right_subtree.value:
+                    tree_map.add(NumberTree(left_subtree, right_subtree, "+"))
+                    tree_map.add(NumberTree(left_subtree, right_subtree, "*"))
 
-        print(self.numbers)
+                tree_map.add(NumberTree(left_subtree, right_subtree, "-"))
+
+                if right_subtree.value != 0:
+                    tree_map.add(NumberTree(left_subtree, right_subtree, "/"))
+
         for tree in tree_map.all_trees():
-            print(tree)
+            if abs(tree.value - self.goal) < sys.float_info.epsilon:
+                print(tree, tree.value)
+        print(self.numbers, self.goal)
+
 
 if __name__ == "__main__":
     solver = NumbersRoundSolver()

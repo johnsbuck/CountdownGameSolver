@@ -55,15 +55,19 @@ class InclusionMap(object):
     def __init__(self, size=6):
         # The main dict map used to store each TreeNode
         self.map = {}
+
         # The secondary storage of all trees
         self.tree_list = []
 
+        # Add size of number listing
+        self._size = size
+
         # Initializing the map values and TreeNodes
-        self._generate_map(list(range(size)))
+        self._generate_map(list(range(self._size)))
         self._generate_refs()
 
     def add(self, new_tree):
-        key = tuple(set((0, 1, 2, 3, 4, 5)) - set(new_tree.key))
+        key = tuple(set(list(range(self._size))) - set(new_tree.key))
         if key != ():
             self.map[key].add_tree(new_tree)
         self.tree_list.append(new_tree)
@@ -143,7 +147,7 @@ class InclusionMap(object):
 
 
 if __name__ == "__main__":
-    test = InclusionMap([1, 2, 3, 4, 5, 6])
+    test = InclusionMap(6)
     keys = list(test.map.keys())
     keys.sort(key=lambda x: len(x))
     print(len(keys), keys)

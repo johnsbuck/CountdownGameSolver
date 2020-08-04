@@ -1,3 +1,7 @@
+import math
+import operator as op
+
+
 class NumberTree(object):
 
     def __init__(self, *args):
@@ -28,6 +32,8 @@ class NumberTree(object):
             >>> right_leaf = new NumberTree(4)
             >>> tree = new NumberTree(left_leaf, right_leaf, lambda x,y: x+y)
             """
+        self._env = {"+": op.add, "-": op.sub, "*": op.mul, "/": op.truediv}
+
         if len(args) == 2:
             self.left_tree = None
             self.right_tree = None
@@ -38,7 +44,7 @@ class NumberTree(object):
             self.left_tree = args[0]
             self.right_tree = args[1]
             self.operator = args[2]
-            self._val = self.operator(self.left_tree.value, self.right_tree.value)
+            self._get_value()
             key_list = list(args[0].key) + list(args[1].key)
             key_list.sort()
             self._key = tuple(key_list)
@@ -51,23 +57,9 @@ class NumberTree(object):
     def key(self):
         return self._key
 
-    # Needs work
-    # def print_tree(self, prefix=None, suffix=None):
-    #     output = ""
-    #
-    #     if self.left is not None:
-    #         if prefix is not None:
-    #             output += prefix
-    #         output += self.left.print_tree(prefix, suffix)
-    #
-    #     output += str(self.value)
-    #
-    #     if self.right is not None:
-    #         output += self.right.print_tree(prefix, suffix)
-    #         if suffix is not None:
-    #             output += suffix
-    #
-    #     return output
+    def _get_value(self):
+        if self.operator in self._env:
+            self._val = self._env[self.operator](self.left_tree.value, self.right_tree.value)
 
     def __eq__(self, other):
         if self.value == other.value:
@@ -98,11 +90,11 @@ class NumberTree(object):
         if self.left_tree is None:
             if self.right_tree is None:
                 return str(self.value)
-            return str(self.value) + " + " + str(self.right_tree)
+            return "(" + str(self.value) + " " + self.operator + " " + str(self.right_tree) + ")"
         if self.right_tree is None:
-            return str(self.left_tree) + " + " + str(self.value)
+            return "(" + str(self.left_tree) + " " + self.operator + " " + str(self.value) + ")"
 
-        return str(self.left_tree) + " + " + str(self.right_tree)
+        return "(" + str(self.left_tree) + " " + self.operator + " " + str(self.right_tree) + ")"
 
     def __repr__(self):
         return self.__str__()
