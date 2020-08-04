@@ -54,7 +54,7 @@ class InclusionMap(object):
 
     def __init__(self, size=6):
         # The main dict map used to store each TreeNode
-        self.map = {(): TreeNode(())}
+        self._map = {(): TreeNode(())}
 
         # Add size of number listing
         self._size = size
@@ -66,11 +66,11 @@ class InclusionMap(object):
     def add(self, new_tree):
         key = tuple(set(list(range(self._size))) - set(new_tree.key))
         if key != ():
-            self.map[key].add_tree(new_tree)
+            self._map[key].add_tree(new_tree)
 
     def get_trees(self, key=()):
         tree_list = []
-        node = self.map[key]
+        node = self._map[key]
         node.reset_iterator()
         next_tree = node.next_tree()
         while next_tree is not None:
@@ -96,7 +96,7 @@ class InclusionMap(object):
 
             # For each number, create a new tuple key and new TreeNode object
             s1 = s + (num,)
-            self.map[s1] = TreeNode(s1)
+            self._map[s1] = TreeNode(s1)
 
             # Create new keys and TreeNodes based on the current key
             self._generate_map(numbers, s1, i+1)
@@ -117,7 +117,7 @@ class InclusionMap(object):
 
         """
         # Obtain list of keys and sort based on length
-        keys = list(self.map.keys())
+        keys = list(self._map.keys())
         keys.sort(key=lambda x: len(x))
 
         # Add references to each TreeNode in the map
@@ -136,14 +136,17 @@ class InclusionMap(object):
                     continue
 
                 # Properties validated; adding reference to specific TreeNode
-                self.map[key].node_forest.append(self.map[ref_key])
+                self._map[key].node_forest.append(self._map[ref_key])
 
 
 if __name__ == "__main__":
     test = InclusionMap(6)
-    keys = list(test.map.keys())
+
+    # Test the references in the InclusionMap
+    keys = list(test._map.keys())
     keys.sort(key=lambda x: len(x))
-    print(len(keys), keys)
-    print()
-    for key in test.map:
-        print(key, test.map[key].node_forest)
+
+    print(len(keys), keys, "\n")
+
+    for key in test._map:
+        print(key, test._map[key].node_forest)

@@ -1,17 +1,41 @@
 from Node import NumberTree
 from Map import InclusionMap
+from collections import deque
 import sys
 import time
 import random
-from collections import deque
 
 
 class NumbersRoundSolver(object):
 
-    def __init__(self, numbers=None, solve_num=None):
+    def __init__(self, numbers=None, goal=None):
         self.numbers = self.generate_numbers() if numbers is None else numbers
         self.numbers.sort()
-        self.goal = random.randint(100, 999) if solve_num is None else solve_num
+        self.goal = random.randint(100, 999) if goal is None else goal
+
+    @property
+    def numbers(self) -> [int, float]:
+        return self._numbers
+
+    @property
+    def goal(self) -> (int, float):
+        return self._goal
+
+    @numbers.setter
+    def numbers(self, value: [int, float]):
+        if type(value) is not list:
+            raise ValueError()
+        for item in value:
+            if type(item) not in (int, float):
+                raise ValueError()
+        self._numbers = value
+        self._numbers.sort()
+
+    @goal.setter
+    def goal(self, value: (int, float)):
+        if type(value) not in (int, float):
+            raise ValueError()
+        self._goal = value
 
     @staticmethod
     def generate_numbers():
@@ -68,4 +92,5 @@ class NumbersRoundSolver(object):
 if __name__ == "__main__":
     solver = NumbersRoundSolver()
     print(solver.numbers, solver.goal)
-    solve_gen = list(solver.solve())
+    for sol in solver.solve():
+        print(sol, "=", sol.value)
