@@ -87,14 +87,21 @@ class NumberTree(object):
         return False
 
     def __str__(self):
-        if self.left_tree is None:
-            if self.right_tree is None:
-                return str(self.value)
-            return "(" + str(self.value) + " " + self.operator + " " + str(self.right_tree) + ")"
-        if self.right_tree is None:
-            return "(" + str(self.left_tree) + " " + self.operator + " " + str(self.value) + ")"
+        output = ""
 
-        return "(" + str(self.left_tree) + " " + self.operator + " " + str(self.right_tree) + ")"
+        if self.left_tree is not None:
+            output += "("
+            output += str(self.left_tree)
+            output += " + "
+
+        output += str(self.value)
+
+        if self.right_tree is not None:
+            output += " + "
+            output += str(self.right_tree)
+            output += ")"
+
+        return output
 
     def __repr__(self):
         return self.__str__()
