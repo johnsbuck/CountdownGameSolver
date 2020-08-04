@@ -54,10 +54,7 @@ class InclusionMap(object):
 
     def __init__(self, size=6):
         # The main dict map used to store each TreeNode
-        self.map = {}
-
-        # The secondary storage of all trees
-        self.tree_list = []
+        self.map = {(): TreeNode(())}
 
         # Add size of number listing
         self._size = size
@@ -70,9 +67,8 @@ class InclusionMap(object):
         key = tuple(set(list(range(self._size))) - set(new_tree.key))
         if key != ():
             self.map[key].add_tree(new_tree)
-        self.tree_list.append(new_tree)
 
-    def get_trees(self, key):
+    def get_trees(self, key=()):
         tree_list = []
         node = self.map[key]
         node.reset_iterator()
@@ -81,9 +77,6 @@ class InclusionMap(object):
             tree_list.append(next_tree)
             next_tree = node.next_tree()
         return tree_list
-
-    def all_trees(self):
-        return self.tree_list
 
     def _generate_map(self, numbers, s=(), idx=0):
         """Generates the main map used to explore the set of NumberTrees.

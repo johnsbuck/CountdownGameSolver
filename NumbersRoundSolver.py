@@ -1,7 +1,9 @@
 from Node import NumberTree
 from Map import InclusionMap
 import sys
+import time
 import random
+from collections import deque
 
 
 class NumbersRoundSolver(object):
@@ -19,39 +21,51 @@ class NumbersRoundSolver(object):
         return [small_nums.pop(random.randrange(0, len(small_nums))) for _ in range(4)] + \
                [large_nums.pop(random.randrange(0, len(large_nums))) for _ in range(2)]
 
-    # @staticmethod
-    # def formula_reader(bt: BTNode):
-    #     formula = bt.print_tree(prefix="(", suffix=")")
-    #
-    #     print(formula)
+    def get_all_solutions(self):
+        return list(self.solve())
 
     def solve(self):
-        print(self.numbers, self.goal)
+        # Queue for latest tree
+        tree_queue = deque()
 
+        # Map for finding matching tree listings
         tree_map = InclusionMap(len(self.numbers))
 
+        # Add elemental trees to the queue and map
         for index, i in enumerate(self.numbers):
-            tree_map.add(NumberTree(i, (index,)))
-        all_trees = tree_map.all_trees()
-        for left_subtree in all_trees:
-            key = left_subtree.key
-            right_selection = tree_map.get_trees(key)
+            tree = NumberTree(i, (index,))
+            tree_map.add(tree)
+            tree_queue.append(tree)
+
+        # Main loop
+        while len(tree_queue) != 0:
+            left_subtree = tree_queue.popleft()
+            # If tree is a solution, yield the answer
+            if abs(left_subtree.value - self.goal) < sys.float_info.epsilon:
+                yield left_subtree
+
+            # Find all possible selection with left subtree
+            right_selection = tree_map.get_trees(left_subtree.key)
             for right_subtree in right_selection:
+                # Skip most symmetrical trees, since addition and multiplication is commutative
                 if left_subtree.value >= right_subtree.value:
-                    tree_map.add(NumberTree(left_subtree, right_subtree, "+"))
-                    tree_map.add(NumberTree(left_subtree, right_subtree, "*"))
+                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "+")
+                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "*")
 
-                tree_map.add(NumberTree(left_subtree, right_subtree, "-"))
+                # Add subtraction tree
+                self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "-")
 
-                if right_subtree.value != 0:
-                    tree_map.add(NumberTree(left_subtree, right_subtree, "/"))
+                # Add division tree if right value isn't 0
+                if abs(right_subtree.value) > sys.float_info.epsilon:
+                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "/")
 
-        for tree in tree_map.all_trees():
-            if abs(tree.value - self.goal) < sys.float_info.epsilon:
-                print(tree, tree.value)
-        print(self.numbers, self.goal)
+    def _add_tree(self, tree_map, tree_queue, left, right, operator):
+        tree = NumberTree(left, right, operator)
+        tree_map.add(tree)
+        tree_queue.append(tree)
 
 
 if __name__ == "__main__":
     solver = NumbersRoundSolver()
-    solver.solve()
+    print(solver.numbers, solver.goal)
+    solve_gen = list(solver.solve())
