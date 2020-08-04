@@ -4,10 +4,34 @@ This project is meant to solve the following game rounds from the game show Coun
 1. The Letters Round & Conundrum
 2. The Numbers Round
 
-## Rules
-### The Letters Round
+## Notes
+*Wordlist was taken from [Aaron Flanagan's Github Gist page](https://gist.github.com/AaronFlanagan20/d1c0a1c8a0a7d539e0ac).*
+*Wordlist may not be perfectly designed to Countdown Game Show rules.*
 
-### Conundrum
+## Rules
+### The Letters Round / Conundrum
+There are two stacks of shuffled tiles, one stack containing vowels and the other containing consonants.
+A contestant picks a stack 9 times to create a selection of letters. 
+
+The contestants must then create the largest word possible
+with the letters selected.
+
+Conundrum Round is the same as the Letters Round, 
+except it is a combination of words that the contestants must configure into a 9 letter word.
+
+**Example**
+
+The letters selected are:
+
+G Y H D N O E U R
+
+Contestant One declares 7, while Contestant Two declares 8.
+
+Contestant One reveals **younger**, but Contestant Two reveals **hydrogen** and scores 8 points. Contestant One does not score.
+
+Dictionary Corner notes **greyhound**, which would have scored 18 points for using all nine letters.
+
+*For more information, checkout this [Wikipedia article](https://en.wikipedia.org/wiki/Countdown_(game_show)#Letters_round).*
 
 ### The Numbers Round
 There are 24 shuffled face-down numbers organized into two groups:
