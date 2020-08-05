@@ -5,8 +5,25 @@ This project is meant to solve the following game rounds from the game show Coun
 2. The Numbers Round
 
 ## Notes
-*Wordlist was taken from [Aaron Flanagan's Github Gist page](https://gist.github.com/AaronFlanagan20/d1c0a1c8a0a7d539e0ac).*
-*Wordlist may not be perfectly designed to Countdown Game Show rules.*
+### Letters Round
+Wordlist was taken from [Aaron Flanagan's Github Gist page](https://gist.github.com/AaronFlanagan20/d1c0a1c8a0a7d539e0ac).
+
+Wordlist may not be perfectly designed to Countdown Game Show rules.
+
+### Numbers
+
+The size of the Numbers Round tree is massive, and can take immensive amount of time after 6 numbers. 
+To put in perspective, there is at least:
+
+<img src="equation.gif" alt="Number Tree Equation" style="float: center" />
+
+Where <img src="https://render.githubusercontent.com/render/math?math=4^{i-1}"> represents the 
+number of possible operations in a set of trees, <img src="https://render.githubusercontent.com/render/math?math=2^{max(0, i-2)}">
+represents a lower bound for the number of parentheses groups in a set of trees, and 
+<img src="https://render.githubusercontent.com/render/math?math={n \choose i} * i!"> represents the
+number of possible permutations for n numbers in a tree of size i.
+
+***Please use caution when trying numbers higher than 6, especially when you are trying to get all solutions.***
 
 ## Rules
 ### The Letters Round / Conundrum
