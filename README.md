@@ -23,7 +23,7 @@ represents a lower bound for the number of parentheses groups in a set of trees,
 <img src="https://render.githubusercontent.com/render/math?math={n \choose i} * i!"> represents the
 number of possible permutations for n numbers in a tree of size i.
 
-***Please use caution when trying numbers higher than 6, especially when you are trying to get all solutions.***
+***Please use caution when trying more than 6 numbers, especially when you are trying to get all solutions.***
 
 ## Rules
 ### The Letters Round / Conundrum
