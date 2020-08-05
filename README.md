@@ -15,7 +15,7 @@ Wordlist may not be perfectly designed to Countdown Game Show rules.
 The size of the Numbers Round tree is massive, and can take immensive amount of time after 6 numbers. 
 To put in perspective, there is at least:
 
-<img src="equation.gif" alt="Number Tree Equation" style="float: center" />
+<img src="img/equation.gif" alt="Number Tree Equation" style="float: center" />
 
 Where <img src="https://render.githubusercontent.com/render/math?math=4^{i-1}"> represents the 
 number of possible operations in a set of trees, <img src="https://render.githubusercontent.com/render/math?math=2^{max(0, i-2)}">
