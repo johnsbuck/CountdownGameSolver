@@ -42,7 +42,7 @@ class NumbersRoundSolver(object):
         small_nums = list(range(1, 11)) * 2
         large_nums = [25, 50, 75, 100]
 
-        return [small_nums.pop(random.randrange(0, len(small_nums))) for _ in range(4)] + \
+        return [small_nums.pop(random.randrange(0, len(small_nums))) for _ in range(5)] + \
                [large_nums.pop(random.randrange(0, len(large_nums))) for _ in range(2)]
 
     def get_all_solutions(self):
@@ -62,6 +62,7 @@ class NumbersRoundSolver(object):
             tree_queue.append(tree)
 
         best = tree_queue[0]
+        marked = {}
 
         # Main loop
         while len(tree_queue) != 0:
@@ -71,6 +72,13 @@ class NumbersRoundSolver(object):
                 yield left_subtree
             if abs(best.value - self.goal) > abs(left_subtree.value - self.goal):
                 best = left_subtree
+
+            if left_subtree.key not in marked:
+                marked[left_subtree.key] = set([left_subtree.value])
+            elif left_subtree.value not in marked[left_subtree.key]:
+                marked[left_subtree.key].add(left_subtree.value)
+            else:
+                continue
 
             # Find all possible selection with left subtree
             right_selection = tree_map.get_trees(left_subtree.key)
@@ -103,6 +111,7 @@ if __name__ == "__main__":
     start = time.perf_counter()
     solve = solver.solve()
     for sol in solve:
-        print(sol, "=", sol.value)
+        pass
+        # print(sol, "=", sol.value)
     end = time.perf_counter()
     print(f"{end - start:0.4f} seconds")
