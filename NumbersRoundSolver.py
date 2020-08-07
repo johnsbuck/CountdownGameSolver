@@ -103,6 +103,7 @@ if __name__ == "__main__":
     start = time.perf_counter()
     solve = solver.solve()
     for sol in solve:
-        print(sol, "=", sol.value)
+        pass
+        # print(sol, "=", sol.value)
     end = time.perf_counter()
     print(f"{end - start:0.4f} seconds")
