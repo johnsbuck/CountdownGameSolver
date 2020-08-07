@@ -1,4 +1,5 @@
-
+global deep_search
+deep_search = False
 class TreeNode(object):
 
     def __init__(self, key):
@@ -9,23 +10,29 @@ class TreeNode(object):
         self.forest_iter_index = 0
         self.node_iter_index = 0
 
-    def _contain_value(self, value, parent_query):
-        if parent_query:
+    def contain_value(self, value, query_from_child):
+        if query_from_child:
             return value in self.forest.keys()
         else:
             if value in self.forest.keys():
                 self.forest.pop(value)
+            if deep_search:
+                for child in self.children_nodes:
+                    child.contain_value(value, False)
             return
 
     def add_tree(self, tree):
         val = tree.value
+        parent_contains_value = False
         for parent in self.parent_nodes:
-            parent._contain_value(val, False)
-        flag = False
-        for child in self.children_nodes and not flag:
-            flag = child._contain_value(val, True)
-        if not flag:
-            self.forest[val] = tree
+            parent_contains_value = parent.contain_value(val, True)
+            if parent_contains_value:
+                return
+
+        self.forest[val] = tree
+
+        for child in self.children_nodes:
+            child.contain_value(val, False)
 
     def init_iterator(self, start_index=0):
         self.node_iter_index = start_index
