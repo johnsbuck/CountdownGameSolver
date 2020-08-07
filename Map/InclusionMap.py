@@ -3,13 +3,29 @@ class TreeNode(object):
 
     def __init__(self, key):
         self.key = key
-        self.forest = []
-        self.node_forest = []
+        self.forest = {}
+        self.parent_nodes = []
+        self.children_nodes = []
         self.forest_iter_index = 0
         self.node_iter_index = 0
 
+    def _contain_value(self, value, parent_query):
+        if parent_query:
+            return value in self.forest.keys()
+        else:
+            if value in self.forest.keys():
+                self.forest.pop(value)
+            return
+
     def add_tree(self, tree):
-        self.forest.append(tree)
+        val = tree.value
+        for parent in self.parent_nodes:
+            parent._contain_value(val, False)
+        flag = False
+        for child in self.children_nodes and not flag:
+            flag = child._contain_value(val, True)
+        if not flag:
+            self.forest[val] = tree
 
     def init_iterator(self, start_index=0):
         self.node_iter_index = start_index
@@ -17,9 +33,9 @@ class TreeNode(object):
     def next_tree(self):
         if self.forest_iter_index < len(self.forest):
             self.forest_iter_index += 1
-            return self.forest[self.forest_iter_index - 1]
-        elif self.node_iter_index < len(self.node_forest):
-            next_node = self.node_forest[self.node_iter_index]
+            return list(self.forest.values())[self.forest_iter_index - 1]
+        elif self.node_iter_index < len(self.parent_nodes):
+            next_node = self.parent_nodes[self.node_iter_index]
             next_node.init_iterator(self.node_iter_index)
             tree = next_node.next_tree()
             if tree is None:
@@ -33,7 +49,7 @@ class TreeNode(object):
     def reset_iterator(self):
         self.forest_iter_index = 0
         self.node_iter_index = 0
-        for node in self.node_forest:
+        for node in self.parent_nodes:
             node.reset_iterator()
 
     def __str__(self):
@@ -136,7 +152,7 @@ class InclusionMap(object):
                     continue
 
                 # Properties validated; adding reference to specific TreeNode
-                self._map[key].node_forest.append(self._map[ref_key])
+                self._map[key].parent_nodes.append(self._map[ref_key])
 
 
 if __name__ == "__main__":
@@ -149,4 +165,4 @@ if __name__ == "__main__":
     print(len(keys), keys, "\n")
 
     for key in test._map:
-        print(key, test._map[key].node_forest)
+        print(key, test._map[key].parent_nodes)
