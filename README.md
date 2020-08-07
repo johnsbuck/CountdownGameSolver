@@ -13,15 +13,18 @@ Wordlist may not be perfectly designed to Countdown Game Show rules.
 ### Numbers
 
 The size of the Numbers Round tree is massive, and can take immensive amount of time after 6 numbers. 
-To put in perspective, there is at least:
+To put in perspective, the total number of equations for n numbers are:
 
 <img src="img/equation.gif" alt="Number Tree Equation" style="float: center" />
 
-Where <img src="https://render.githubusercontent.com/render/math?math=4^{i-1}"> represents the 
-number of possible operations in a set of trees, <img src="https://render.githubusercontent.com/render/math?math=2^{max(0, i-2)}">
-represents a lower bound for the number of parentheses groups in a set of trees, and 
-<img src="https://render.githubusercontent.com/render/math?math={n \choose i} * i!"> represents the
-number of possible permutations for n numbers in a tree of size i.
+1. Where <img src="https://render.githubusercontent.com/render/math?math=4^{i-1}"> represents the 
+number of possible operator sets in a set of trees. We subtract one because i=1 has no operators.
+
+2. Where <img src="https://render.githubusercontent.com/render/math?math={n \choose i} * i!"> represents the number of possible permutations for n numbers in a tree of size i.
+
+3. Where <img src="https://render.githubusercontent.com/render/math?math=\frac{(2(i-1)!)}{(i-1)!i!}"> represents the 
+different number of parentheses groups you can have with a tree of i nodes. We substract one because i=2 has only one 
+configuration since we are already considering permutations.
 
 ***Please use caution when trying more than 6 numbers, especially when you are trying to get all solutions.***
 
