@@ -1,6 +1,7 @@
 from Node import NumberTree
 from Map import InclusionMap
 from collections import deque
+from queue import PriorityQueue
 import time
 import math
 import random
@@ -37,6 +38,9 @@ class NumbersRoundSolver(object):
             raise ValueError()
         self._goal = value
 
+    def g(self, x):
+        return abs(x.value - self.goal)
+
     @staticmethod
     def generate_numbers():
         small_nums = list(range(1, 11)) * 2
@@ -50,7 +54,7 @@ class NumbersRoundSolver(object):
 
     def solve(self):
         # Queue for latest tree
-        tree_queue = deque()
+        tree_queue = PriorityQueue()
 
         # Map for finding matching tree listings
         tree_map = InclusionMap(len(self.numbers))
@@ -59,13 +63,14 @@ class NumbersRoundSolver(object):
         for index, i in enumerate(self.numbers):
             tree = NumberTree(i, (index,))
             tree_map.add(tree)
-            tree_queue.append(tree)
+            tree_queue.put((self.g(tree), tree))
 
-        best = tree_queue[0]
+        best = tree_queue.get()[1]
+        tree_queue.put((self.g(best), best))
 
         # Main loop
-        while len(tree_queue) != 0:
-            left_subtree = tree_queue.popleft()
+        while tree_queue.qsize() != 0:
+            left_subtree = tree_queue.get()[1]
             # If tree is a solution, yield the answer
             if math.isclose(left_subtree.value, self.goal):
                 yield left_subtree
@@ -94,16 +99,21 @@ class NumbersRoundSolver(object):
     def _add_tree(self, tree_map, tree_queue, left, right, operator):
         tree = NumberTree(left, right, operator)
         tree_map.add(tree)
-        tree_queue.append(tree)
+        tree_queue.put((self.g(tree), tree))
 
 
 if __name__ == "__main__":
-    solver = NumbersRoundSolver()
-    print(solver.numbers, solver.goal)
-    start = time.perf_counter()
-    solve = solver.solve()
-    for sol in solve:
-        pass
-        # print(sol, "=", sol.value)
-    end = time.perf_counter()
-    print(f"{end - start:0.4f} seconds")
+    total = 100
+    avg = []
+    for i in range(total):
+        solver = NumbersRoundSolver()
+        print(solver.numbers, solver.goal)
+        start = time.perf_counter()
+        solve = solver.solve()
+        sol = next(solve)
+        end = time.perf_counter()
+        print(i+1, ":", f"{end - start:0.4f} seconds")
+        avg.append(end - start)
+    print("Average:", sum(avg) / len(avg))
+    print("Max Time:", max(avg))
+    print("Min Time:", min(avg))
