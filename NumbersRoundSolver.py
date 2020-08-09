@@ -52,18 +52,21 @@ class NumbersRoundSolver(object):
     def get_all_solutions(self):
         return list(self.solve())
 
-    def solve(self):
+    def solve(self, map=None, sub_key=()):
         # Queue for latest tree
         tree_queue = PriorityQueue()
 
         # Map for finding matching tree listings
-        tree_map = InclusionMap(len(self.numbers))
+        if map is None:
+            tree_map = InclusionMap(len(self.numbers))
 
-        # Add elemental trees to the queue and map
-        for index, i in enumerate(self.numbers):
-            tree = NumberTree(i, (index,))
-            tree_map.add(tree)
-            tree_queue.put((self.g(tree), tree))
+            # Add elemental trees to the queue and map
+            for index, i in enumerate(self.numbers):
+                tree = NumberTree(i, (index,))
+                tree_map.add(tree)
+                tree_queue.put((self.g(tree), tree))
+        else:
+            tree_map = map
 
         best = tree_queue.get()[1]
         tree_queue.put((self.g(best), best))
@@ -77,20 +80,35 @@ class NumbersRoundSolver(object):
             if abs(best.value - self.goal) > abs(left_subtree.value - self.goal):
                 best = left_subtree
 
+            right_selection = tree_map.get_trees(left_subtree.key + sub_key)
+
+            op_str = ["+", "-", "*", "/"]
+            solution_found = False
+            if len(sub_key) == len(self.numbers):
+                for index, op in enumerate([lambda x: x - self.goal, lambda x: x + self.goal, \
+                                            lambda x: x / self.goal, lambda x: x * self.goal]):
+                    sub_goal = op(left_subtree.value)
+                    sub_solver = NumbersRoundSolver(goal=sub_goal)
+                    print(left_subtree, left_subtree.key)
+                    right_subtree = next(sub_solver.solve(left_subtree.key + sub_key))
+                    if self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, op_str[index]):
+                        solution_found = True
+                        break
+
             # Find all possible selection with left subtree
-            right_selection = tree_map.get_trees(left_subtree.key)
-            for right_subtree in right_selection:
-                # Skip most symmetrical trees, since addition and multiplication is commutative
-                if left_subtree.value >= right_subtree.value:
-                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "+")
-                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "*")
+            if not solution_found:
+                for right_subtree in right_selection:
+                    # Skip most symmetrical trees, since addition and multiplication is commutative
+                    if left_subtree.value >= right_subtree.value:
+                        self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "+")
+                        self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "*")
 
-                # Add subtraction tree
-                self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "-")
+                    # Add subtraction tree
+                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "-")
 
-                # Add division tree if right value isn't 0
-                if not math.isclose(right_subtree.value, 0):
-                    self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "/")
+                    # Add division tree if right value isn't 0
+                    if not math.isclose(right_subtree.value, 0):
+                        self._add_tree(tree_map, tree_queue, left_subtree, right_subtree, "/")
 
         # If there is no solution, return best solution
         if not math.isclose(best.value, self.goal):
